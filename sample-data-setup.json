@@ -1,0 +1,43 @@
+{
+  "config": [
+    {
+      "name": "SampleList",
+      "addToView": true,
+      "addToQuickLaunch": true,
+      "columns": [
+        { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Message"  },
+        { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 20, "Title": "AssignedTo" },
+        {
+          "__metadata": { "type": "SP.FieldChoice" }, "FieldTypeKind": 6, "Title": "Status",
+          "Choices": {
+            "__metadata": { "type": "Collection(Edm.String)" },
+            "results": [
+              "Created", "Assigned", "In-Progress", "Completed", "Archived", "On-Hold", "Cancelled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Config",
+      "addToView": false,
+      "addToQuickLaunch": true,
+      "columns": [
+        { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "JSON" },
+        { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Description" }
+      ],
+      "items": [
+        {
+          "Title": "App",
+          "JSON": "{\"pageSize\": 10, \"theme\": \"light\"}",
+          "Description": "Config for App (light theme)"
+        },
+        {
+          "Title": "Dark-App",
+          "JSON": "{\"pageSize\": 10, \"theme\": \"dark\"}",
+          "Description": "Config for App (dark theme)"
+        }
+      ]
+    }
+  ]
+}
