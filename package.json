@@ -1,6 +1,6 @@
 {
   "name": "sp-devops",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A tool to perform devops on Sharepoint online sites",
   "main": "index.js",
   "scripts": {
