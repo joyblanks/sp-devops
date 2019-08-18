@@ -22,7 +22,7 @@ const main = async (input) => {
         logger.error(e);
       });
     } else {
-      logger.note('Plese use flags --deploy or --setup to proceed'.bgRed);
+      logger.fatal('Plese use flags --deploy or --setup to proceed'.bgRed);
     }
   } catch (e) {
     const err = '[Error] Something went wrong';

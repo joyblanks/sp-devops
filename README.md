@@ -1,7 +1,7 @@
-### **`sp-devops`** is a command line utility to manage devops for **Microsoft Sharepoint Online** for modern Front-end projects.
+### **`sp-devops`** is a command line utility to manage devops for **Microsoft Sharepoint Online** for modern Front-End projects.
 
 # Introduction
-**sp-devops** is a command line utility to manage devops for **Microsoft Sharepoint Online** for modern Front-end projects.
+**sp-devops** is a command line utility to manage devops for **Microsoft Sharepoint Online** for modern Front-End projects.
 
 There are very few custom sites built on modern Front-End frameworks on Sharepoint Online 365. Its a big hassle to manage the deployment which is completely manual. To address this problem I have created this library and is being used in a project of mine
 
@@ -24,7 +24,7 @@ Deployment:
 $ sp-devops --deploy
 ```
 
-Setup (create DBs, Sites, Populate, etc,): 
+Setup (create DBs, Sites, Populate, etc.): 
 ```
 $ sp-devops --setup
 ```
@@ -72,8 +72,12 @@ $ npm run sp-ng-create-lists
 | sp-log-level | Logging level of the Application | --sp-log-level=debug|
 | sp-spec-list | Path to a JSON specification file <br>which contains configuration to create lists <br> and if data needs to be pre-polulated after creation  | --sp-spec-list=./configs/create-list.json|
 
-# Sample Run
-![Grant Permission to Sharepoint App](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run.png)
+# Sample Run [--deloy]
+![Sample Run --deploy](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run-deploy.png)
+
+
+# Sample Run [--setup]
+![Sample Run --setup](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run-setup.png)
 
 # Setup and Configuration
 - Setup a Sharepoint App to run sp-devops
@@ -147,7 +151,7 @@ $ npm run sp-ng-create-lists
   sp-dist-folder=dist
 
   # --------------------------------------------- Setups ---------------------------------------------#
-  # Path to spec file for creating Lists, Sites, Populate data, etc
+  # Path to spec file for creating Lists, Sites, Populate data, etc.
   #sp-spec-list=./sharepoint-list-spec.json
   #sp-spec-site=./sharepoint-site-spec.json
   ```
@@ -168,6 +172,7 @@ $ npm run sp-ng-create-lists
           "name": "SampleList",
           "addToView": true,
           "addToQuickLaunch": true,
+          "dropIfExists": false,
           "columns": [
             { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Message"  },
             { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 20, "Title": "AssignedTo" },
@@ -186,6 +191,7 @@ $ npm run sp-ng-create-lists
           "name": "ConfigList",
           "addToView": false,
           "addToQuickLaunch": true,
+          "dropIfExists": true,
           "columns": [
             { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "JSON" },
             { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Description" }
@@ -223,4 +229,4 @@ $ npm run sp-ng-create-lists
 Please feel free to log Pull requests, issues, bugs and improvement ideas
 
 
-Author: **Joy Biswas**
+Author: [**Joy Biswas** @joyblanks](https://github.com/joyblanks/sp-devops/commits?author=joyblanks)

@@ -4,6 +4,7 @@
       "name": "SampleList",
       "addToView": true,
       "addToQuickLaunch": true,
+      "dropIfExists": false,
       "columns": [
         { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Message"  },
         { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 20, "Title": "AssignedTo" },
@@ -22,6 +23,7 @@
       "name": "Config",
       "addToView": false,
       "addToQuickLaunch": true,
+      "dropIfExists": false,
       "columns": [
         { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "JSON" },
         { "__metadata": { "type": "SP.Field" }, "FieldTypeKind": 3, "Title": "Description" }

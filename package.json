@@ -1,7 +1,7 @@
 {
   "name": "sp-devops",
   "version": "1.1.0",
-  "description": "A tool to perform devops on Sharepoint online sites",
+  "description": "sp-devops is a command line utility to manage devops for Microsoft Sharepoint Online for modern Front-End projects",
   "main": "index.js",
   "scripts": {
     "deploy": "node index.js"
@@ -13,7 +13,7 @@
     "Node.js",
     "Deploy",
     "Setup",
-    "joyblnaks",
+    "joyblanks",
     "npm"
   ],
   "author": {

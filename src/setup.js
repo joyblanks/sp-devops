@@ -12,6 +12,39 @@ const {
 } = require('./utils');
 
 
+const isListExists = async (siteUrl, subsite, listName, authorization) => {
+  let response = null;
+  try {
+    response = await fetch(`${makePath(siteUrl, subsite)}/_api/web/lists/getbytitle('${listName}')`, {
+      headers: getHeaders(authorization),
+      method: 'GET',
+    }).catch(throwError);
+    response = await response.json().catch(throwError);
+    response = !!(response.d);
+  } catch (e) {
+    throwError(e);
+  }
+  return response;
+};
+
+const getListColumns = async (siteUrl, subsite, listName, authorization) => {
+  let response = null;
+  const query = '$filter=Hidden eq false and ReadOnlyField eq false&$select=Title';
+  try {
+    response = await fetch(`${makePath(siteUrl, subsite)}/_api/web/lists/getbytitle('${listName}')/Fields?${query}`, {
+      headers: getHeaders(authorization),
+      method: 'GET',
+    }).catch(throwError);
+    response = await response.json().catch(throwError);
+    if (response.d && response.d.results) {
+      response = response.d.results.map((col) => col.Title);
+    } else response = [];
+  } catch (e) {
+    throwError(e);
+  }
+  return response;
+};
+
 const deleteItems = async (siteUrl, subsite, listName, itemIds, authorization, formDigest) => {
   let count = 0;
   const total = itemIds.length;
@@ -135,13 +168,15 @@ const createColumn = async (siteUrl, subsite, listConfig, column, authorization,
   return response;
 };
 
-const createColumns = async (siteUrl, subsite, listConfig, authorization, formDigest) => {
+const createColumns = async (siteUrl, subsite, listConfig, existingCols, authorization, formDigest) => {
   const responses = [];
   let response = null;
   try {
     for (const column of listConfig.columns) {
-      response = await createColumn(siteUrl, subsite, listConfig, column, authorization, formDigest).catch(throwError);
-      responses.push(response);
+      if (!existingCols.includes(column.Title)) {
+        response = await createColumn(siteUrl, subsite, listConfig, column, authorization, formDigest).catch(throwError);
+        responses.push(response);
+      }
     }
   } catch (e) {
     throwError(e);
@@ -175,9 +210,19 @@ const createLists = async (siteUrl, subsite, specFileCreateList, authorization, 
     const rawData = fs.readFileSync(specFileCreateList);
     const specJson = JSON.parse(rawData);
     for (const listConfig of specJson.config) {
-      await deleteList(siteUrl, subsite, listConfig.name, authorization, formDigest).catch(throwError);
-      await createList(siteUrl, subsite, listConfig, authorization, formDigest).catch(throwError);
-      await createColumns(siteUrl, subsite, listConfig, authorization, formDigest).catch(throwError);
+      const listExists = await isListExists(siteUrl, subsite, listConfig.name, authorization).catch(throwError);
+      let existingColumns = [];
+      if (listExists) {
+        if (listConfig.dropIfExists) {
+          await deleteList(siteUrl, subsite, listConfig.name, authorization, formDigest).catch(throwError);
+          await createList(siteUrl, subsite, listConfig, authorization, formDigest).catch(throwError);
+        } else {
+          existingColumns = await getListColumns(siteUrl, subsite, listConfig.name, authorization).catch(throwError);
+        }
+      } else {
+        await createList(siteUrl, subsite, listConfig, authorization, formDigest).catch(throwError);
+      }
+      await createColumns(siteUrl, subsite, listConfig, existingColumns, authorization, formDigest).catch(throwError);
       await addItems(siteUrl, subsite, listConfig.name, listConfig.items, authorization, formDigest).catch(throwError);
     }
   } catch (e) {

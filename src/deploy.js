@@ -52,7 +52,7 @@ const deleteFile = async (siteUrl, subsite, file, formDigest, authorization) => 
 };
 
 const deleteFolder = async (siteUrl, subsite, folder, formDigest, authorization) => {
-  logger.info('Deleting Folder'.padEnd(padGap), `${displayNoSubSite(folder, subsite).red}`);
+  logger.progress('Deleting Folder'.padEnd(padGap), (`[${displayNoSubSite(folder, subsite)}]`).red.bold);
   let response = null;
   try {
     response = await fetch(`${makePath(siteUrl, subsite)}/_api/web/GetFolderByServerRelativeUrl('${folder}')`, {
@@ -78,7 +78,7 @@ const makeFolder = async (siteUrl, subsite, folder, remoteFolder, formDigest, au
     const folderArray = folder.split('/');
     while (folderArray.length) {
       const sub = folderArray.shift();
-      logger.info('Creating folder'.padEnd(padGap), (`${spFolder}/${sub}`).green);
+      logger.progress('Creating folder'.padEnd(padGap), (`[${spFolder}${sub ? '/' : ''}${sub}]`).green.bold);
       const object = JSON.stringify({ __metadata: { type: 'SP.Folder' }, ServerRelativeUrl: `${spFolder}/${sub}` });
       let response = await fetch(`${makePath(siteUrl, subsite)}/_api/web/folders`, {
         method: 'POST',
@@ -142,7 +142,7 @@ const deleteSite = async (siteUrl, subsite, remoteFolder, formDigest, authorizat
           .catch(throwError);
       }
     }
-    logger.complete('Site Deleted'.padEnd(padGap), (`${makePath(siteUrl, subsite)}/${remoteFolder}`.red));
+    logger.complete('Deleted Site'.padEnd(padGap), (`${makePath(siteUrl, subsite)}/${remoteFolder}`.red));
   } catch (e) {
     throwError(e);
   }
@@ -177,7 +177,7 @@ const listLocalFiles = async (dir, subdir) => {
 };
 
 const uploadFile = async (siteUrl, subsite, folder, file, formDigest, authorization) => {
-  logger.progress('Uploading File'.padEnd(padGap), (`${folder}${file.name}`).green);
+  logger.progress('Uploading File'.padEnd(padGap), (`${folder}/${file.name}`).green);
   const folderPath = `('${folder}')/Files/add(overwrite=true, url='${file.name}')`;
   let response = null;
   try {
@@ -217,7 +217,8 @@ const uploadSite = async (siteUrl, subsite, localFolder, remoteFolder, formDiges
         availableFolders.push(subdir);
         await makeFolder(siteUrl, subsite, subdir, remoteFolder, formDigest, authorization).catch(throwError);
       }
-      await uploadFile(siteUrl, subsite, `${remoteFolder}/${subdir}`, object, formDigest, authorization).catch(throwError);
+      await uploadFile(siteUrl, subsite, `${remoteFolder}${subdir ? '/' : ''}${subdir}`, object, formDigest, authorization)
+        .catch(throwError);
     }
   } catch (e) {
     throwError(e);

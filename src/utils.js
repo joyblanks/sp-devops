@@ -43,7 +43,6 @@ const transformInput = (input) => ({
 });
 
 const throwError = (e) => {
-  // logger.error(e);
   throw e;
 };
 
@@ -87,7 +86,7 @@ const getClientInfo = async (site, subsite) => new Promise((resolve) => {
 
 const getAccessToken = async (site, subsite, appClientId, appClientSecret) => {
   const { realm, clientId } = await getClientInfo(site, subsite);
-  logger.info('Generating'.padEnd(padGap), `${'AccessToken'.blue}=App[${appClientId.magenta}@${realm.magenta}]`);
+  logger.info('Generating'.padEnd(padGap), `${'AccessToken'.blue} App[${appClientId.magenta}@${realm.magenta}]`);
   const query = makeQuery({
     grant_type: 'client_credentials',
     client_id: `${appClientId}@${realm}`,
@@ -137,8 +136,7 @@ const getFormDigestValue = async (site, subsite, authorization) => {
     response = await response.json();
     response = response.d.GetContextWebInformation.FormDigestValue;
   } catch (e) {
-    logger.info(e);
-    throw e;
+    throwError(e);
   }
   return response;
 };
