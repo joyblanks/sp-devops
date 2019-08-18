@@ -10,6 +10,7 @@ const {
   getHeaders,
   padGap,
   throwError,
+  normalizeFilePathForUpload,
   displayNoSubSite,
 } = require('./utils');
 
@@ -206,7 +207,7 @@ const uploadSite = async (siteUrl, subsite, localFolder, remoteFolder, formDiges
     for (const file of files) {
       const buff = readFile(file);
       const object = {
-        name: file.substring(file.lastIndexOf('/') + 1),
+        name: normalizeFilePathForUpload(file.substring(file.lastIndexOf(path.sep) + 1)),
         length: buff.length,
         data: buff,
       };

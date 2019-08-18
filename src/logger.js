@@ -16,6 +16,18 @@ const logger = new Signale({
       label: 'progress',
       logLevel: 'info',
     },
+    complete: {
+      badge: '√',
+      color: 'green',
+      label: 'complete',
+      logLevel: 'info',
+    },
+    await: {
+      badge: '●',
+      color: 'gray',
+      label: 'awaiting',
+      logLevel: 'info',
+    },
   },
 });
 

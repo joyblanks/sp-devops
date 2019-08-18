@@ -1,7 +1,9 @@
 const https = require('https');
 const fetch = require('node-fetch');
+const path = require('path');
 const colors = require('colors');
 const logger = require('./logger');
+
 
 const padGap = 20;
 
@@ -17,6 +19,8 @@ const makePath = (site, subsite = '') => {
   }
   return '';
 };
+
+const normalizeFilePathForUpload = (file) => file.split(path.sep).join('/');
 
 const displayNoSubSite = (str, subsite) => {
   if (subsite) {
@@ -149,5 +153,6 @@ module.exports = {
   colors,
   padGap,
   throwError,
+  normalizeFilePathForUpload,
   displayNoSubSite,
 };
