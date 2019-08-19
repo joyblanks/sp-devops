@@ -1,0 +1,4 @@
+**/*.json
+.env.example
+.editorconfig
+assets/*
