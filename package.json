@@ -4,7 +4,8 @@
   "description": "sp-devops is a command line utility to manage devops for Microsoft Sharepoint Online for modern Front-End projects",
   "main": "index.js",
   "scripts": {
-    "deploy": "node index.js"
+    "main": "node index.js",
+    "check-pack": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
   },
   "keywords": [
     "Sharepoint",

@@ -5,7 +5,9 @@
 
 There are very few custom sites built on modern Front-End frameworks on Sharepoint Online 365. Its a big hassle to manage the deployment which is completely manual. To address this problem I have created this library and is being used in a project of mine
 
-Will post a sample site written in Angular and is managed by sp-devops to deploy to sharepoint and its databases/lists are being created by it.
+
+
+Checkout [**ng-sharepoint**](https://github.com/joyblanks/ng-sharepoint) (https://github.com/joyblanks/ng-sharepoint), a sample project written in Angular and is managed by `sp-devops` to deploy to sharepoint and its databases/lists are being created by it.
 
 # Installation
 As a dev dependency in your project
@@ -29,13 +31,19 @@ Setup (create DBs, Sites, Populate, etc.):
 $ sp-devops --setup
 ```
 
+Get a Authorization Bearer Access token to use in REST API's
+```
+$ sp-devops --accesstoken
+```
+
 # Usage
 
 In your package.json add a script
 ```json
 scripts: {
   "sp-ng-build-deploy": "npm run build --prod && sp-devops --deploy",
-  "sp-ng-create-lists": "sp-devops --setup --sp-spec-list=./<path-to>/<spec.json>"
+  "sp-ng-create-lists": "sp-devops --setup --sp-spec-list=./<path-to>/<spec.json>",
+  "sp-get-access-token": "sp-devops --accesstoken"
 }
 ```
 
@@ -53,15 +61,21 @@ $ npm run sp-ng-create-lists
 ```
 
 
+Get a Authorization Bearer Access token to use in REST API's in POSTMAN or in fetch API's useful for standalone testing
+```
+$ npm run sp-get-access-token
+```
+
 
 
 # Command-Line-Args and Environment-Variables
-[NOTE]*: Do not put property `deploy` and `setup` in .env files
+[NOTE]*: Do not put property `accesstoken`, `deploy` and `setup` in .env files
 
 | ENV \| CLI property | Description | Usage |
 |--|--|--|
 | deploy* | Deploys the distribution to a Sharepoint folder | --deploy |
 | setup* | Create Lists/Sites, Preload data etc.|--setup |
+| accesstoken* | Get an Authorization Bearer accessToken.|--accesstoken |
 | sp-site-url | Your Sharepoint Site Domain | --sp-site-url=https://[$tenant].sharepoint.com|
 | sp-subsite | If you are working on a SubSite |--subsite=Sub1/Sub2 |
 | sp-app-client-id | Sharepoint App Client ID | --sp-app-client-id=aaaaaaa-zzzz-1234-wxyz|
@@ -78,6 +92,11 @@ $ npm run sp-ng-create-lists
 
 # Sample Run [--setup]
 ![Sample Run --setup](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run-setup.png)
+
+
+# Sample Run [--accesstoken]
+![Sample Run --setup](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run-accesstoken.png)
+
 
 # Setup and Configuration
 - Setup a Sharepoint App to run sp-devops
@@ -162,7 +181,7 @@ $ npm run sp-ng-create-lists
     "sp-ng-build-deploy": "npm run build --prod && sp-devops --deploy"
   }
   ```
-- For Setup (like creating DBs and Sites/Subsites (WIP))
+- For Setup (like creating DBs and Sites/Subsites) [Look under ./assets/samples in this repository]
   
   - you need to pass a JSON file to create your lists or to pre-populate data
     ```json

@@ -4,7 +4,6 @@ const path = require('path');
 const { promisify } = require('util');
 const {
   getFormDigestValue,
-  getAccessToken,
   makePath,
   logger,
   getHeaders,
@@ -12,7 +11,9 @@ const {
   throwError,
   normalizeFilePathForUpload,
   displayNoSubSite,
+  readFile,
 } = require('./utils');
+const { getAccessToken } = require('./accesstoken');
 
 const getFiles = async (siteUrl, subsite, folder, authorization) => {
   logger.info('Listing Folder'.padEnd(padGap), folder.cyan);
@@ -148,18 +149,16 @@ const deleteSite = async (siteUrl, subsite, remoteFolder, formDigest, authorizat
   }
 };
 
-const readFile = (location) => fs.readFileSync(location);
-
 const listLocalFiles = async (dir, subdir) => {
   const readdirAsync = promisify(fs.readdir);
   const dirs = [];
-  let filesInFolder = [];
+  const filesInFolder = [];
   let response = null;
   try {
     const files = await readdirAsync(dir + path.sep + subdir).catch(throwError);
     for (const file of files) {
       if (fs.statSync(`${dir}${path.sep}${subdir}${path.sep}${file}`).isDirectory()) {
-        filesInFolder = await listLocalFiles(`${dir}`, `${subdir}${path.sep}${file}`).catch(throwError);
+        filesInFolder.push(await listLocalFiles(`${dir}`, `${subdir}${path.sep}${file}`).catch(throwError));
         dirs.push(file);
       }
     }
@@ -169,7 +168,7 @@ const listLocalFiles = async (dir, subdir) => {
         files.splice(index, 1);
       }
     });
-    response = files.map((file) => `${dir}${subdir}${path.sep}${file}`).concat(filesInFolder);
+    response = files.map((file) => `${dir}${subdir}${path.sep}${file}`).concat(...filesInFolder);
   } catch (e) {
     throwError(e);
   }
@@ -227,11 +226,17 @@ const uploadSite = async (siteUrl, subsite, localFolder, remoteFolder, formDiges
 };
 
 const deploy = async ({
-  appClientId, appClientSecret, siteUrl, subsite, remoteFolder, distFolder, accessToken,
+  appClientId,
+  appClientSecret,
+  siteUrl,
+  subsite,
+  remoteFolder,
+  distFolder,
+  authToken,
 }) => {
   logger.start('Operation Started'.bold, '😈');
   try {
-    const authorization = accessToken || await getAccessToken(siteUrl, subsite, appClientId, appClientSecret).catch(throwError);
+    const authorization = authToken || await getAccessToken(siteUrl, subsite, appClientId, appClientSecret).catch(throwError);
     const formDigest = await getFormDigestValue(siteUrl, subsite, authorization).catch(throwError);
     await deleteSite(siteUrl, subsite, remoteFolder, formDigest, authorization).catch(throwError);
     await uploadSite(siteUrl, subsite, distFolder, remoteFolder, formDigest, authorization).catch(throwError);

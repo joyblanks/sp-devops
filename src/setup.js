@@ -3,13 +3,13 @@ const fs = require('fs');
 
 const {
   getFormDigestValue,
-  getAccessToken,
   makePath,
   logger,
   getHeaders,
   padGap,
   throwError,
 } = require('./utils');
+const { getAccessToken } = require('./accesstoken');
 
 
 const isListExists = async (siteUrl, subsite, listName, authorization) => {
@@ -233,13 +233,14 @@ const createLists = async (siteUrl, subsite, specFileCreateList, authorization, 
 const setup = async ({
   appClientId,
   appClientSecret,
-  siteUrl, subsite,
+  siteUrl,
+  subsite,
   specFileCreateList,
-  accessToken,
+  authToken,
 }) => {
   logger.start('Operation Started'.bold, '😈');
   try {
-    const authorization = accessToken || await getAccessToken(siteUrl, subsite, appClientId, appClientSecret).catch(throwError);
+    const authorization = authToken || await getAccessToken(siteUrl, subsite, appClientId, appClientSecret).catch(throwError);
     const formDigest = await getFormDigestValue(siteUrl, subsite, authorization).catch(throwError);
     await createLists(siteUrl, subsite, specFileCreateList, authorization, formDigest).catch(throwError);
     logger.success('Operation Completed'.bold, '😈');

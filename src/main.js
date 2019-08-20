@@ -1,6 +1,7 @@
 const { logger, transformInput } = require('./utils');
 const { setup } = require('./setup');
 const { deploy } = require('./deploy');
+const { accesstoken } = require('./accesstoken');
 
 const main = async (input) => {
   const args = transformInput(input);
@@ -11,6 +12,11 @@ const main = async (input) => {
     } else if (!args.siteUrl) {
       logger.error('Sharepoint site is required to proceed');
       process.exit(0);
+    } else if (args.accesstoken) {
+      await accesstoken(args).catch((e) => {
+        logger.error((`Unable to get Access Token ${args.site}/${args.subsite}/`).red);
+        logger.error(e);
+      });
     } else if (args.deploy) {
       await deploy(args).catch((e) => {
         logger.error((`Unable to Deploy ${args.site}/${args.subsite}/`).red);
@@ -22,7 +28,7 @@ const main = async (input) => {
         logger.error(e);
       });
     } else {
-      logger.fatal('Plese use flags --deploy or --setup to proceed'.bgRed);
+      logger.fatal('Plese use flags --deploy, --setup or --accesstoken to proceed'.bgRed);
     }
   } catch (e) {
     const err = '[Error] Something went wrong';

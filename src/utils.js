@@ -1,9 +1,8 @@
-const https = require('https');
 const fetch = require('node-fetch');
 const path = require('path');
+const fs = require('fs');
 const colors = require('colors');
 const logger = require('./logger');
-
 
 const padGap = 20;
 
@@ -19,6 +18,8 @@ const makePath = (site, subsite = '') => {
   }
   return '';
 };
+
+const readFile = (location) => fs.readFileSync(location);
 
 const normalizeFilePathForUpload = (file) => file.split(path.sep).join('/');
 
@@ -67,63 +68,6 @@ const getHeaders = (authorization, headers = {}, removeList = []) => {
   return newHeaders;
 };
 
-const getClientInfo = async (site, subsite) => new Promise((resolve) => {
-  const req = https.get({
-    hostname: new URL(site).hostname,
-    path: `${makePath(null, subsite)}/_vti_bin/client.svc`,
-    headers: {
-      Authorization: 'Bearer',
-    },
-  }, (res) => {
-    const authHeader = res.headers['www-authenticate'];
-    const realm = extract('realm', authHeader);
-    const clientId = extract('client_id', authHeader);
-    resolve({ realm, clientId });
-  });
-  req.on('error', throwError);
-  req.end();
-}).catch(throwError);
-
-const getAccessToken = async (site, subsite, appClientId, appClientSecret) => {
-  const { realm, clientId } = await getClientInfo(site, subsite);
-  logger.info('Generating'.padEnd(padGap), `${'AccessToken'.blue} App[${appClientId.magenta}@${realm.magenta}]`);
-  const query = makeQuery({
-    grant_type: 'client_credentials',
-    client_id: `${appClientId}@${realm}`,
-    client_secret: appClientSecret,
-    resource: `${clientId}/${new URL(site).hostname}@${realm}`,
-  });
-  const options = {
-    method: 'GET',
-    hostname: 'accounts.accesscontrol.windows.net',
-    path: `/${realm}/tokens/OAuth/2`,
-    headers: {
-      Host: 'accounts.accesscontrol.windows.net',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': query.length,
-    },
-  };
-  return new Promise((resolve) => {
-    const req = https.request(options, (res) => {
-      const chunks = [];
-      res.on('data', (chunk) => {
-        chunks.push(chunk);
-      });
-      res.on('end', () => {
-        const body = Buffer.concat(chunks);
-        try {
-          const json = JSON.parse(body.toString());
-          resolve(`Bearer ${json.access_token}`);
-        } catch (e) {
-          throwError(e);
-        }
-      });
-    }).on('error', throwError);
-    req.write(query);
-    req.end();
-  }).catch(throwError);
-};
-
 const getFormDigestValue = async (site, subsite, authorization) => {
   logger.info('Generating'.padEnd(padGap), 'ContextInfo.FormDigest'.blue);
   let response = null;
@@ -143,7 +87,6 @@ const getFormDigestValue = async (site, subsite, authorization) => {
 
 module.exports = {
   getFormDigestValue,
-  getAccessToken,
   transformInput,
   makePath,
   logger,
@@ -153,4 +96,7 @@ module.exports = {
   throwError,
   normalizeFilePathForUpload,
   displayNoSubSite,
+  makeQuery,
+  extract,
+  readFile,
 };
