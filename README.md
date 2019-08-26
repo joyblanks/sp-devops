@@ -133,7 +133,7 @@ $ npm run sp-get-access-token
     |:-:|
     | ![Grant Permission to Sharepoint App](https://github.com/joyblanks/sp-devops/raw/master/assets/app-grant-permission.jpg) |
     
-  NOTE: Create a different App for different site else there are some unexpected behavior
+    NOTE: **For a remote folder in the above diagram in dropdown needs to be granted access, so the files can behave properly, even though they will be uploaded but will be downloaded and not executed on the browser. In the above `Site Assets` folder is given access to deploy the contents.
     
 
 - If you do not have  authorization to create an App, you can ask your Sharepoint admin to generate an **Authorization Bearer 'AccessToken'** token and share with you which you can also use to fire this library.
