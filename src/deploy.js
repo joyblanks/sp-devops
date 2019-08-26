@@ -138,6 +138,8 @@ const deleteSite = async (siteUrl, subsite, remoteFolder, formDigest, authorizat
       for (const file of files) {
         await deleteFile(siteUrl, subsite, file, formDigest, authorization).catch(throwError);
       }
+    }
+    for (const folder of folders) {
       if (folder !== remoteFolder) {
         await deleteFolder(siteUrl, subsite, `${makePath(null, subsite)}/${folder}`, formDigest, authorization)
           .catch(throwError);

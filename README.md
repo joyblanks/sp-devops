@@ -133,7 +133,7 @@ $ npm run sp-get-access-token
     |:-:|
     | ![Grant Permission to Sharepoint App](https://github.com/joyblanks/sp-devops/raw/master/assets/app-grant-permission.jpg) |
     
-    
+  NOTE: Create a different App for different site else there are some unexpected behavior
     
 
 - If you do not have  authorization to create an App, you can ask your Sharepoint admin to generate an **Authorization Bearer 'AccessToken'** token and share with you which you can also use to fire this library.
