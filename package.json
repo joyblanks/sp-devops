@@ -1,6 +1,6 @@
 {
   "name": "sp-devops",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "sp-devops is a command line utility to manage devops for Microsoft Sharepoint Online for modern Front-End projects",
   "main": "index.js",
   "scripts": {
