@@ -32,15 +32,15 @@ const displayNoSubSite = (str, subsite) => {
 
 const transformInput = (input) => ({
   ...input,
-  appClientId: input['sp-app-client-id'],
-  appClientSecret: input['sp-app-client-secret'],
-  accessToken: input['sp-access-token'],
-  siteUrl: input['sp-site-url'],
-  subsite: input['sp-subsite'],
-  remoteFolder: input['sp-remote-folder'],
-  distFolder: input['sp-dist-folder'],
-  specFileCreateList: input['sp-spec-list'] || 'sharepoint-list-spec.json',
-  specFileCreateSite: input['sp-spec-site'] || 'sharepoint-site-spec.json', // TODO
+  appClientId: input.sp_app_client_id || input['sp-app-client-id'],
+  appClientSecret: input.sp_app_client_secret || input['sp-app-client-secret'],
+  accessToken: input.sp_accestoken || input['sp-access-token'],
+  siteUrl: input.sp_site_url || input['sp-site-url'],
+  subsite: input.sp_subsite || input['sp-subsite'],
+  remoteFolder: input.sp_remote_folder || input['sp-remote-folder'],
+  distFolder: input.sp_dist_folder || input['sp-dist-folder'],
+  specFileCreateList: input.sp_spec_list || input['sp-spec-list'] || 'sharepoint-list-spec.json',
+  specFileCreateSite: input.sp_spec_site || input['sp-spec-site'] || 'sharepoint-site-spec.json', // TODO
 });
 
 const throwError = (e) => {

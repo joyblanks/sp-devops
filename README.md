@@ -139,6 +139,7 @@ $ npm run sp-get-access-token
 - If you do not have  authorization to create an App, you can ask your Sharepoint admin to generate an **Authorization Bearer 'AccessToken'** token and share with you which you can also use to fire this library.
 - Create a **.env** file in your project and specify these values
   ```sh
+  # NOTE: `Dash(-)` Notation and `Underscore(_)` notation both works example `sp-app-client-secret` or `sp_app_client_secret` 
   # -------------------------------------------- Common --------------------------------------------#
 
   # Your Sharepoint Site Domain
@@ -174,6 +175,7 @@ $ npm run sp-get-access-token
   #sp-spec-list=./sharepoint-list-spec.json
   #sp-spec-site=./sharepoint-site-spec.json
   ```
+  **NOTE**: `Dash(-)` Notation and `Underscore(_)` notation both works example `sp-app-client-secret` or `sp_app_client_secret` 
 
 - In your package.json add a script and run (Refer #Usage)
   ```json
