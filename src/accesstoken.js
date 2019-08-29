@@ -46,7 +46,7 @@ const getAccessToken = async (site, subsite, appClientId, appClientSecret) => {
       'Content-Length': query.length,
     }, ['Authorization', 'Accept']),
   };
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const req = https.request(options, (res) => {
       const chunks = [];
       res.on('data', (chunk) => {
@@ -56,7 +56,12 @@ const getAccessToken = async (site, subsite, appClientId, appClientSecret) => {
         const body = Buffer.concat(chunks);
         try {
           const json = JSON.parse(body.toString());
-          resolve(`Bearer ${json.access_token}`);
+          const error = json.error_description;
+          if (error) {
+            reject(new Error(error));
+          } else {
+            resolve(`Bearer ${json.access_token}`);
+          }
         } catch (e) {
           throwError(e);
         }

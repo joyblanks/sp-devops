@@ -1,4 +1,4 @@
-const { logger, transformInput } = require('./utils');
+const { logger, transformInput, isEmpty } = require('./utils');
 const { setup } = require('./setup');
 const { deploy } = require('./deploy');
 const { accesstoken } = require('./accesstoken');
@@ -6,37 +6,28 @@ const { accesstoken } = require('./accesstoken');
 const main = async (input) => {
   const args = transformInput(input);
   try {
-    if (!((args.appClientId && args.appClientSecret) || args.accessToken)) {
-      logger.error('Sharepoint App Details required to access site');
-      process.exit(0);
-    } else if (!args.siteUrl) {
-      logger.error('Sharepoint site is required to proceed');
-      process.exit(0);
+    if (!((!isEmpty(args.appClientId) && !isEmpty(args.appClientSecret)) || !isEmpty(args.accessToken))) {
+      throw new Error('Sharepoint App Credentials or an AccessToken is required to access site'.red);
+    } else if (isEmpty(args.siteUrl)) {
+      throw new Error('Sharepoint site url is required to proceed'.red);
     } else if (args.accesstoken) {
       await accesstoken(args).catch((e) => {
-        logger.error((`Unable to get Access Token ${args.site}/${args.subsite}/`).red);
-        logger.error(e);
+        throw new Error((`Unable to get Access Token ${args.siteUrl}/${args.subsite}/\n`).red + e);
       });
     } else if (args.deploy) {
       await deploy(args).catch((e) => {
-        logger.error((`Unable to Deploy ${args.site}/${args.subsite}/`).red);
-        logger.error(e);
+        throw new Error((`Unable to Deploy ${args.siteUrl}/${args.subsite}/\n`).red + e);
       });
     } else if (args.setup) {
       await setup(args).catch((e) => {
-        logger.error((`Unable to Setup ${args.site}/${args.subsite}/`).red);
-        logger.error(e);
+        throw new Error((`Unable to Setup ${args.siteUrl}/${args.subsite}/\n`).red + e);
       });
     } else {
-      logger.fatal('Plese use flags --deploy, --setup or --accesstoken to proceed'.bgRed);
+      throw new Error('Plese use flags --deploy, --setup or --accesstoken to proceed'.red);
     }
   } catch (e) {
-    const err = '[Error] Something went wrong';
-    if (logger) {
-      logger.error(err + e);
-    } else {
-      process.stderr.write(err + e);
-    }
+    logger.fatal(e);
+    throw new Error(e);
   }
 };
 

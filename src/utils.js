@@ -78,12 +78,18 @@ const getFormDigestValue = async (site, subsite, authorization) => {
       headers: getHeaders(authorization),
     });
     response = await response.json();
+    const errorMsg = response && response.error_description;
+    if (errorMsg) {
+      throwError(new Error(errorMsg));
+    }
     response = response.d.GetContextWebInformation.FormDigestValue;
   } catch (e) {
     throwError(e);
   }
   return response;
 };
+
+const isEmpty = (val) => (val === undefined || val === null || val === '');
 
 module.exports = {
   getFormDigestValue,
@@ -99,4 +105,5 @@ module.exports = {
   makeQuery,
   extract,
   readFile,
+  isEmpty,
 };
