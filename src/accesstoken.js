@@ -6,7 +6,7 @@ const {
   getHeaders,
   padGap,
   throwError,
-  extract,
+  extractClientInfo,
   makeQuery,
 } = require('./utils');
 
@@ -19,8 +19,8 @@ const getClientInfo = async (site, subsite) => new Promise((resolve) => {
     },
   }, (res) => {
     const authHeader = res.headers['www-authenticate'];
-    const realm = extract('realm', authHeader);
-    const clientId = extract('client_id', authHeader);
+    const realm = extractClientInfo('realm', authHeader);
+    const clientId = extractClientInfo('client_id', authHeader);
     resolve({ realm, clientId });
   });
   req.on('error', throwError);

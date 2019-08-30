@@ -31,16 +31,20 @@ const displayNoSubSite = (str, subsite) => {
 };
 
 const transformInput = (input) => ({
-  ...input,
-  appClientId: input.sp_app_client_id || input['sp-app-client-id'],
-  appClientSecret: input.sp_app_client_secret || input['sp-app-client-secret'],
-  accessToken: input.sp_accestoken || input['sp-access-token'],
-  siteUrl: input.sp_site_url || input['sp-site-url'],
-  subsite: input.sp_subsite || input['sp-subsite'],
-  remoteFolder: input.sp_remote_folder || input['sp-remote-folder'],
-  distFolder: input.sp_dist_folder || input['sp-dist-folder'],
-  specFileCreateList: input.sp_spec_list || input['sp-spec-list'] || 'sharepoint-list-spec.json',
-  specFileCreateSite: input.sp_spec_site || input['sp-spec-site'] || 'sharepoint-site-spec.json', // TODO
+  deploy: input.deploy,
+  setup: input.setup,
+  accesstoken: input.accesstoken,
+
+  logLevel: input.SP_LOG_LEVEL,
+  siteUrl: input.SP_SITE_URL,
+  subsite: input.SP_SUBSITE,
+  appClientId: input.SP_APP_CLIENT_ID,
+  appClientSecret: input.SP_APP_CLIENT_SECRET,
+  accessToken: input.SP_ACCESTOKEN,
+  remoteFolder: input.SP_REMOTE_FOLDER,
+  distFolder: input.SP_DIST_FOLDER,
+  specFileCreateList: input.SP_SPEC_LIST || 'sharepoint-list-spec.json',
+  specFileCreateSite: input.SP_SPEC_SITE || 'sharepoint-site-spec.json', // TODO
 });
 
 const throwError = (e) => {
@@ -49,7 +53,7 @@ const throwError = (e) => {
 
 const makeQuery = (params) => Object.keys(params).map((key) => `${key}=${encodeURIComponent(params[key])}`).join('&');
 
-const extract = (key, data) => {
+const extractClientInfo = (key, data) => {
   const regex = new RegExp(`${key}="(.*?)"`);
   const values = regex.exec(data);
   return values && values[1];
@@ -103,7 +107,7 @@ module.exports = {
   normalizeFilePathForUpload,
   displayNoSubSite,
   makeQuery,
-  extract,
+  extractClientInfo,
   readFile,
   isEmpty,
 };

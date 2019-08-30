@@ -8,7 +8,7 @@ const logger = new Signale({
   scope: name,
   displayTimestamp: true,
   stream: process.stdout,
-  logLevel: argv['sp-log-level'] || 'info',
+  logLevel: argv.SP_LOG_LEVEL || 'info',
   types: {
     progress: {
       badge: '✪',

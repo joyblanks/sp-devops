@@ -42,7 +42,7 @@ In your package.json add a script
 ```json
 scripts: {
   "sp-ng-build-deploy": "npm run build --prod && sp-devops --deploy",
-  "sp-ng-create-lists": "sp-devops --setup --sp-spec-list=./<path-to>/<spec.json>",
+  "sp-ng-create-lists": "sp-devops --setup --SP_SPEC_LIST=./<path-to>/<spec.json>",
   "sp-get-access-token": "sp-devops --accesstoken"
 }
 ```
@@ -76,15 +76,15 @@ $ npm run sp-get-access-token
 | deploy* | Deploys the distribution to a Sharepoint folder | --deploy |
 | setup* | Create Lists/Sites, Preload data etc.|--setup |
 | accesstoken* | Get an Authorization Bearer accessToken.|--accesstoken |
-| sp-site-url | Your Sharepoint Site Domain | --sp-site-url=https://[$tenant].sharepoint.com|
-| sp-subsite | If you are working on a SubSite |--subsite=Sub1/Sub2 |
-| sp-app-client-id | Sharepoint App Client ID | --sp-app-client-id=aaaaaaa-zzzz-1234-wxyz|
-| sp-app-client-secret | Sharepoint App Client Secret| --sp-app-client-secret=0000000000 |
-| sp-access-token | Sharepoint Authorization Bearer Token | --sp-access-token=Bearer [accessToken]|
-| sp-dist-folder | Path Local Distribution folder (Source)| --sp-dist-folder=../bin/src|
-| sp-remote-folder | Path to Remote Folder in Sharepoint (Destination) | --sp-remote-folder=SiteAssets/App|
-| sp-log-level | Logging level of the Application | --sp-log-level=debug|
-| sp-spec-list | Path to a JSON specification file <br>which contains configuration to create lists <br> and if data needs to be pre-polulated after creation  | --sp-spec-list=./configs/create-list.json|
+| SP_SITE-URL | Your Sharepoint Site Domain | --SP_SITE-URL=https://[$tenant].sharepoint.com|
+| SP_SUBSITE | If y_u are working on a SubSite |--SP_SUBSITE=Sub1/Sub2 |
+| SP_APP-CLIENT_ID | Sharepoint App Client ID | --SP_APP_CLIENT_ID=aaaaaaa-zzzz-1234-wxyz|
+| SP_APP-CLIENT_SECRET | Sharepoint App Client Secret| --SP_APP_CLIENT-SECRET=0000000000 |
+| SP_ACCESS_TOKEN | Sharepoint Authorization Bearer Token | --SP_ACCESS_TOKEN=Bearer [accessToken]|
+| SP_DIST_FOLDER | Path Local Distribution folder (Source)| --SP_DIST_FOLDER=../bin/src|
+| SP_REMOTE_FOLDER | Path to Remote Folder in Sharepoint (Destination) | --SP_REMOTE_FOLDER=SiteAssets/App|
+| SP_LOG_LEVEL | Logging level of the Application | --SP_LOG_LEVEL=debug|
+| SP_SPEC_LIST | Path to a JSON specification file <br>which contains configuration to create lists <br> and if data needs to be pre-polulated after creation  | --SP_SPEC_LIST=./configs/create-list.json|
 
 # Sample Run [--deloy]
 ![Sample Run --deploy](https://github.com/joyblanks/sp-devops/raw/master/assets/sample-run-deploy.png)
@@ -139,43 +139,41 @@ $ npm run sp-get-access-token
 - If you do not have  authorization to create an App, you can ask your Sharepoint admin to generate an **Authorization Bearer 'AccessToken'** token and share with you which you can also use to fire this library.
 - Create a **.env** file in your project and specify these values
   ```sh
-  # NOTE: `Dash(-)` Notation and `Underscore(_)` notation both works example `sp-app-client-secret` or `sp_app_client_secret` 
   # -------------------------------------------- Common --------------------------------------------#
 
   # Your Sharepoint Site Domain
-  sp-site-url=https://${tenant}.sharepoint.com
+  SP_SITE_URL=https://${tenant}.sharepoint.com
 
   # If you are deploying to a subsite (Uncomment SP_SUBSITE)
-  # sp-subsite=mysubsite
+  # SP_SUBSITE=mysubsite
 
   # Create a Sharepoint App 
   # then get details from /_layouts/15/AppRegNew.aspx (generate App ClientId and ClientSecret here)
   # and trust your app from /_layouts/15/appinv.aspx (Give permissions and Trust app here)
 
   # Sharepoint APP's CLIENT_ID & CLEINT_SECRET
-  sp-app-client-id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-  sp-app-client-secret=*------------------------------*
+  SP_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  SP_APP_CLIENT_SECRET=********************************
 
   # Access Token from other sources (If you dont have Sharepoint APP's CLIENT_ID & CLEINT_SECRET)
-  # sp-access-token=Bearer <ACCESS_TOKEN>
+  # SP_ACCESS_TOKEN=Bearer <ACCESS_TOKEN>
 
   # Logging level Allowed = [info, debug, warn, error]
-  sp-log-level=info
+  SP_LOG_LEVEL=info
 
   # ------------------------------------------ Deployment ------------------------------------------#
   # Sharepoint-Remote-Folder: where the code-base is to be uploaded
   # Make sure it is a dedicated folder all files/folders are deleted before uploading
-  sp-remote-folder=SiteAssets
+  SP_REMOTE_FOLDER=SiteAssets
 
   # Path to your local distribution folder location
-  sp-dist-folder=dist
+  SP_DIST_FOLDER=dist
 
   # --------------------------------------------- Setups ---------------------------------------------#
   # Path to spec file for creating Lists, Sites, Populate data, etc.
-  #sp-spec-list=./sharepoint-list-spec.json
-  #sp-spec-site=./sharepoint-site-spec.json
+  #SP_SPEC_LIST=./sharepoint-list-spec.json
+  #SP_SPEC_SITE=./sharepoint-site-spec.json
   ```
-  **NOTE**: `Dash(-)` Notation and `Underscore(_)` notation both works example `sp-app-client-secret` or `sp_app_client_secret` 
 
 - In your package.json add a script and run (Refer #Usage)
   ```json
@@ -242,7 +240,7 @@ $ npm run sp-get-access-token
     ```
 - All items in CLI/ENV options can be triggered. [NOTE]: CLI options overrides the ENV vars.
   ```sh
-  npm run sp-ng-create-lists -- --sp-subsite=inside/more_inside
+  npm run sp-ng-create-lists -- --SP_SUBSITE=inside/more_inside
   ```
 
 ---
